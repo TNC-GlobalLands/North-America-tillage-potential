@@ -74,7 +74,7 @@ fetch_topowx <- function(years, county) {
 ###Fetching Daymet precipitation dailies###
 #Gets Daymet precipitation dailies. Arguments:
 #1). Vector of years for which to get daily data
-#2). Polygon of county (feature should include "STATE_NAME" attribute with name of state)
+#2). Polygon of county (feature should include "NAME" attribute w/ name of county and "STATE_NAME" attribute with name of state)
 #3). Number of attempts, in case server fails to respond
 #4). Downtime between attempts (in seconds)
 fetch_daymet <- function(years, county, retrynum, sleepnum) {
