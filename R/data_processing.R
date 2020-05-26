@@ -143,3 +143,20 @@ degree_days <- function(tempdata, years, county) {
   dds_avg <- calc(dds_sum_brick, mean) #Average together degree days by Dec. 31 across all years
   writeRaster(dds_avg, "dds_avg.tif")
 }
+
+###Mean annual precipitation calculation (Daymet)###
+#Note: All Daymet years have 365 days, including leap years
+#NOte: County feature should include "NAME" attribute w/ name of county & "STATE_NAME" attribute w/ name of state
+annual_temp <- function(county, years) {
+  labelstring <- paste0(gsub(" ", "", as.character(county$NAME)), "_Co_", gsub(" ", "", as.character(county$STATE_NAME)))
+  countyproj <- spTransform(county, crs("+proj=lcc +lat_1=25 +lat_2=60 +lat_0=42.5 +lon_0=-100 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 "))
+  
+  countydata <- brick(paste0(labelstring, "_prcp_day.tif")) #Read in downloaded data, which will contain band for each day of year range ... e.g. 30 years = 10,950 bands
+  sumvector <- rep(1:length(years), each = 365)
+  
+  days_sum <- stackApply(countydata_masked, sumvector, fun = sum) #Sum total precip. for year 1 (days 1-365), year 2 (days 366-730), & so on, through year x
+  years_mean <- calc(days_sum, mean) #Mean of total annual precips across full year range
+  years_mean_masked <- raster::mask(years_mean, countyproj)
+  
+  return(years_mean_masked)
+}
