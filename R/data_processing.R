@@ -113,3 +113,33 @@ fetch_daymet <- function(years, county, retrynum, sleepnum) {
   
   return(result)
 }
+
+###Degree day calculation (TopoWx)###
+#Calculates degree days for each day of year, sums results through Dec. 31, & averages all Dec. 31 sums across specified list of years
+#Pass in a list of paths to all min/max temp files for all years of interest, list of years of interest, & county polygon
+degree_days <- function(tempdata, years, county) {
+  countyproj <- spTransform(county, crs("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 ")) #Reproject county to same CRS as TopoWx data has when downloaded
+  i <- 1
+  dds_sum_list <- vector("list", length(years)) #Empty list to contain rasters of degree days by Dec. 31 for each year (to be averaged later)
+  
+  for (year in years) {
+    print(paste0("Now calculating degree days for year: ", year, " ... Current time is: ", Sys.time()))
+    topomax <- brick(tempdata[grepl(paste0("_max_", year), tempdata)]) #Read in all dailies for temp. maxima for given year as raster brick
+    topomin <- brick(tempdata[grepl(paste0("_min_", year), tempdata)]) #Read in all dailies for temp. minima for given year as raster brick
+    
+    topomax_masked <- raster::mask(topomax, countyproj) #Mask to actual county outline
+    topomin_masked <- raster::mask(topomin, countyproj)
+    
+    dds_eq <- ((topomax_masked + topomin_masked) / 2) - 5 #DDs for base temp. of 5 Celsius = (Tmax + Tmin) / 2 - 5
+    dds_reclass <- reclassify(dds_eq, c(-Inf, 0, 0)) #Treat anything w/ a 0 or negative result for DDs as 0, i.e. no degree-day accumulation
+    dds_sum <- calc(dds_reclass, sum) #Add all bands in brick, i.e. days of year, together, to get total degree days by Dec. 31 for each pixel
+    dds_sum_list[[i]] <- dds_sum #Add dds_sum result for given year to list
+    i <- i + 1
+    
+    writeRaster(dds_sum, paste0("ddssum_", year, ".tif"), overwrite = TRUE)
+  }
+  
+  dds_sum_brick <- brick(dds_sum_list)
+  dds_avg <- calc(dds_sum_brick, mean) #Average together degree days by Dec. 31 across all years
+  writeRaster(dds_avg, "dds_avg.tif")
+}
