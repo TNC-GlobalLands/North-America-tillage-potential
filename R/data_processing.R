@@ -74,11 +74,11 @@ fetch_topowx <- function(years, county) {
 ###Fetching Daymet precipitation dailies###
 #Gets Daymet precipitation dailies. Arguments:
 #1). Vector of years for which to get daily data
-#2). Polygon of county (feature should include "CONAME" attribute w/ name of county and "STNAME" attribute with name of state)
+#2). Polygon of county (feature should include "CONAME" attribute w/ name of county and "STNAME" attribute with name of state). Names w/o spaces & special characters.
 #3). Number of attempts, in case server fails to respond
 #4). Downtime between attempts (in seconds)
 fetch_daymet <- function(years, county, retrynum, sleepnum) {
-  labelstring <- paste0(gsub(" ", "", as.character(county$NAME)), "_Co_", gsub(" ", "", as.character(county$STATE_NAME))) #Filename for .tif written to disk
+  labelstring <- paste0(gsub(" ", "", as.character(county$CONAME)), "_Co_", gsub(" ", "", as.character(county$STNAME))) #Filename for .tif written to disk
   countyproj <- spTransform(county, crs("+proj=lcc +lat_1=25 +lat_2=60 +lat_0=42.5 +lon_0=-100 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 "))
   
   get_data <- function() {
@@ -146,9 +146,9 @@ degree_days <- function(tempdata, years, county) {
 
 ###Mean annual precipitation calculation (Daymet)###
 #Note: All Daymet years have 365 days, including leap years
-#NOte: County feature should include "CONAME" attribute w/ name of county & "STNAME" attribute w/ name of state
+#NOte: County feature should include "CONAME" attribute w/ name of county & "STNAME" attribute w/ name of state. Names w/o spaces & special characters.
 annual_temp <- function(county, years) {
-  labelstring <- paste0(gsub(" ", "", as.character(county$NAME)), "_Co_", gsub(" ", "", as.character(county$STATE_NAME)))
+  labelstring <- paste0(gsub(" ", "", as.character(county$CONAME)), "_Co_", gsub(" ", "", as.character(county$STNAME)))
   countyproj <- spTransform(county, crs("+proj=lcc +lat_1=25 +lat_2=60 +lat_0=42.5 +lon_0=-100 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 "))
   
   countydata <- brick(paste0(labelstring, "_prcp_day.tif")) #Read in downloaded data, which will contain band for each day of year range ... e.g. 30 years = 10,950 bands
@@ -163,15 +163,56 @@ annual_temp <- function(county, years) {
 
 ###Fetching NED data###
 #Gets National Elevation Dataset. Arguments:
-#1). Polygon of county (feature should include "CONAME" attribute w/ name of county and "STNAME" attribute with name of state)
+#1). Polygon of county (feature should include "CONAME" attribute w/ name of county and "STNAME" attribute with name of state). Names w/o spaces & special characters.
 #2). Number of attempts, in case server fails to respond
 #3). Downtime between attempts (in seconds)
 fetch_ned <- function(county, retrynum, sleepnum) {
-  labelstring <- paste0(gsub(" ", "", as.character(county$NAME)), "_Co_", gsub(" ", "", as.character(county$STATE_NAME))) #Filename for .tif written to disk
+  labelstring <- paste0(gsub(" ", "", as.character(county$CONAME)), "_Co_", gsub(" ", "", as.character(county$STNAME))) #Filename for .tif written to disk
   countyproj <- spTransform(county, crs("+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"))
   
   get_data <- function() {
     NED <- get_ned(template = county, label = labelstring)
+    
+    return(NED)
+  }
+  
+  #Function that will attempt data download & return NULL if it fails
+  get_data_attempt <- purrr::possibly(get_data, otherwise = NULL)
+  
+  result <- NULL
+  try_number <- 1
+  
+  #Attempt data download for set number of times or until function returns a proper result
+  while(is.null(result) && try_number <= retrynum) {
+    print(paste0("Attempt: ", try_number))
+    try_number <- try_number + 1
+    result <- get_data_attempt()
+    Sys.sleep(sleepnum)
+  }
+  
+  if (try_number > retrynum) {
+    warning("Could not get data!")
+  }
+  
+  return(result)
+}
+
+###Fetching NASS CDL data###
+#Gets NASS Cropland Data Layer. Arguments:
+#1). Polygon of county (feature should include "CONAME" attribute w/ name of county and "STNAME" attribute with name of state). Names w/o spaces & special characters.
+#2). Number of attempts, in case server fails to respond
+#3). Downtime between attempts (in seconds)
+fetch_cdl <- function(county, retrynum, sleepnum) {
+  labelstring <- paste0(gsub(" ", "", as.character(county$CONAME)), "_Co_", gsub(" ", "", as.character(county$STNAME))) #Filename for .tif written to disk
+  
+  get_data <- function() {
+    NED <- get_nass(
+      template = county,
+      label = labelstring,
+      year = 2015,
+      extraction.dir = getwd(),
+      force.redo = TRUE,
+      progress = TRUE)
     
     return(NED)
   }
