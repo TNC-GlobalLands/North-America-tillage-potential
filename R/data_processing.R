@@ -160,3 +160,39 @@ annual_temp <- function(county, years) {
   
   return(years_mean_masked)
 }
+
+###Fetching NED data###
+#Gets National Elevation Dataset. Arguments:
+#1). Polygon of county (feature should include "CONAME" attribute w/ name of county and "STNAME" attribute with name of state)
+#2). Number of attempts, in case server fails to respond
+#3). Downtime between attempts (in seconds)
+fetch_ned <- function(county, retrynum, sleepnum) {
+  labelstring <- paste0(gsub(" ", "", as.character(county$NAME)), "_Co_", gsub(" ", "", as.character(county$STATE_NAME))) #Filename for .tif written to disk
+  countyproj <- spTransform(county, crs("+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"))
+  
+  get_data <- function() {
+    NED <- get_ned(template = county, label = labelstring)
+    
+    return(NED)
+  }
+  
+  #Function that will attempt data download & return NULL if it fails
+  get_data_attempt <- purrr::possibly(get_data, otherwise = NULL)
+  
+  result <- NULL
+  try_number <- 1
+  
+  #Attempt data download for set number of times or until function returns a proper result
+  while(is.null(result) && try_number <= retrynum) {
+    print(paste0("Attempt: ", try_number))
+    try_number <- try_number + 1
+    result <- get_data_attempt()
+    Sys.sleep(sleepnum)
+  }
+  
+  if (try_number > retrynum) {
+    warning("Could not get data!")
+  }
+  
+  return(result)
+}
