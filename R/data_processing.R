@@ -237,3 +237,45 @@ fetch_cdl <- function(county, retrynum, sleepnum) {
   
   return(result)
 }
+
+
+###Fetching NLCD data###
+#Gets NLCD land cover data. Arguments:
+#1). Polygon of county (feature should include "CONAME" attribute w/ name of county and "STNAME" attribute with name of state). Names w/o spaces & special characters.
+#2). Year of NLCD data -- valid years are 2001, 2004, 2006, 2008, 2011, & 2016
+#3). Number of attempts, in case server fails to respond
+#4). Downtime between attempts (in seconds)
+fetch_nlcd <- function(county, yearnum, retrynum, sleepnum) {
+  labelstring <- paste0(gsub(" ", "", as.character(county$CONAME)), "_Co_", gsub(" ", "", as.character(county$STNAME))) #Filename for .tif written to disk
+  
+  get_data <- function() {
+    NLCD <- get_nlcd(
+      template = county,
+      label = labelstring,
+      year = yearnum,
+      dataset = "Land_Cover",
+      landmass = "L48")
+    
+    return(NLCD)
+  }
+  
+  #Function that will attempt data download & return NULL if it fails
+  get_data_attempt <- purrr::possibly(get_data, otherwise = NULL)
+  
+  result <- NULL
+  try_number <- 1
+  
+  #Attempt data download for set number of times or until function returns a proper result
+  while(is.null(result) && try_number <= retrynum) {
+    print(paste0("Attempt: ", try_number))
+    try_number <- try_number + 1
+    result <- get_data_attempt()
+    Sys.sleep(sleepnum)
+  }
+  
+  if (try_number > retrynum) {
+    warning("Could not get data!")
+  }
+  
+  return(result)
+}
