@@ -24,7 +24,7 @@ root.dir = getwd()
 	  cty <- state[state$CONAME == i,]
         if(nrow(cty) > 1) {
 	      cty <- cty[which.max(rgeos::gArea(cty, byid=TRUE)),]
-	        cat(i, " had more than one polygons", "\n")
+	        cat(s, "-", i, "had more than one polygon", "\n")
 	    }	  
   	  writeOGR(cty, file.path(state.dir, i), "bdy",
   	  		   driver="ESRI Shapefile",
