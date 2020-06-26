@@ -3,6 +3,8 @@
 ####   state/county directory. Parses by county name
 #### For counties with more than one polygon, the data is
 ####   filtered to retain the largest polygon
+#### Data is in EPSG:102003 USA_Contiguous_Albers_Equal_Area_Conic
+#### https://epsg.io/102003
 library(sp)
 library(rgdal)
 library(spatialEco)
