@@ -300,7 +300,7 @@ fetch_ned <- function(x, out.dir = getwd(), retrynum = 10, sleepnum = 5) {
   raster::writeRaster(result, result_name, overwrite = TRUE, options = "COMPRESS=LZW")
   
   #Get rid of the initial automatically written output
-  file_to_remove <- list.files(pattern = "*_NED_1.tif")
+  file_to_remove <- list.files(path = out.dir, pattern = "*_NED_1.tif")
   file.remove(file_to_remove)
   
   return(result)
@@ -376,7 +376,7 @@ fetch_cdl <- function(x, yr = 2019, out.dir = getwd(), retrynum = 10, sleepnum =
   raster::writeRaster(result, result_name, overwrite = TRUE, options = "COMPRESS=LZW")
   
   #Get rid of the initial automatically written output
-  files_to_remove <- list.files(pattern = "cdl_2019.tif")
+  files_to_remove <- list.files(path = out.dir, pattern = "cdl_2019.tif")
   file.remove(files_to_remove)
   
   return(result)
@@ -454,7 +454,7 @@ fetch_nlcd <- function(x, yr = 2016, out.dir = getwd(), retrynum = 10, sleepnum 
   raster::writeRaster(result, result_name, overwrite = TRUE, options = "COMPRESS=LZW")
   
   #Get rid of the initial automatically written output
-  files_to_remove <- list.files(pattern = "*Land_Cover*")
+  files_to_remove <- list.files(path = out.dir, pattern = "*Land_Cover*")
   file.remove(files_to_remove)
   
   return(result)
