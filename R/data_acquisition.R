@@ -1,9 +1,12 @@
 # devtools::install_github("ropensci/FedData")
-# library(rgdal)
-# library(raster)
-# library(FedData)
-# library(geoknife)
-# library(purrr)
+library(rgdal)
+library(raster)
+library(FedData)
+library(geoknife)
+library(purrr)
+
+library(spatialEco)
+library(sp)
 
 ###Fetching TopoWx temperature dailies###
 #Gets TopoWx temperature maxima & minima dailies for specified vector of years & specified county's extent box (technically it just needs the FIPS code)
@@ -205,32 +208,50 @@ fetch_ned <- function(county, retrynum, sleepnum) {
   return(result)
 }
 
-###Fetching NASS CDL data###
-# Gets NASS Cropland Data Layer. Arguments:
-#   1) Polygon of county (feature should include "CONAME" attribute w/ name of county 
-#      and "STNAME" attribute with name of state). Names w/o spaces & special characters.
-#   2) Number of attempts, in case server fails to respond
-#   3) Downtime between attempts (in seconds)
-fetch_cdl <- function(county, retrynum, sleepnum) {
-  labelstring <- paste0(gsub(" ", "", as.character(county$CONAME)), "_Co_", gsub(" ", "", as.character(county$STNAME))) 
+
+
+#### Fetch NASS CDL data####
+# Gets NASS Cropland Data Layer 2008-2019. 
+# Arguments:
+# x          Polygon defining download extent
+# yr         Year of download (2008=2019)
+# out.dir    Directory will output will be written
+# retrynum   Number of times to retry download
+# sleepnum   seconds between  tries 
+fetch_cdl <- function(x, yr = 2019, out.dir = getwd(), 
+                      retrynum = 10, sleepnum = 5) {
+  if(!any(class(x)[1] == c("sf","SpatialPolygonsDataFrame", "SpatialPolygons")))
+    stop("x must be an sp or sf polygon object")
+  if(yr < 2008 | yr > 2019)
+    stop("Not a valid year 2008-2019")  	
+  tryCatch({
+  usgs.prj = sf::st_crs("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")					    
+    if(any(class(x)[1] == c("SpatialPolygonsDataFrame", "SpatialPolygons"))){ 
+      if(!sf::st_crs(as(x, "sf")) == usgs.prj)
+    	  x <- as(sf::st_transform(as(x, "sf"), usgs.prj),"Spatial")
+    } else if(any(class(x)[1] == "sf")) {
+      if(!sf::st_crs(x) == usgs.prj)
+    	  x <- as(sf::st_transform(x, usgs.prj),"Spatial")  
+    }
+    if(class(x)[1] == "sf") x <- as(x, "Spatial")
+  })
   get_data <- function() {
-    NED <- get_nass(
-      template = county,
-      label = labelstring,
-      year = 2015,
-      extraction.dir = getwd(),
+    NASS <- FedData::get_nass(
+      template = x,
+      label = "nass",
+      year = yr,
+      extraction.dir = out.dir,
       force.redo = TRUE,
       progress = TRUE)
-    
-    return(NED)
+    return(NASS)
   }
   get_data_attempt <- purrr::possibly(get_data, otherwise = NULL) 
     result <- NULL
-      try_number <- 1
+      try_number <- 1 
   while(is.null(result) && try_number <= retrynum) {
-    print(paste0("Attempt: ", try_number))
-    try_number <- try_number + 1
-    result <- get_data_attempt()
+    cat("Downloading", "NASS-CDL", yr, "attempt:", try_number, "of", retrynum, "\n")
+      try_number <- try_number + 1
+      result <- get_data_attempt()
     Sys.sleep(sleepnum)
   }
   if (try_number > retrynum) {
@@ -238,6 +259,7 @@ fetch_cdl <- function(county, retrynum, sleepnum) {
   }
   return(result)
 }
+
 
 ### Fetching NLCD data ###
 # Gets NLCD land cover data. Arguments:

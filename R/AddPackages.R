@@ -1,5 +1,4 @@
-# Check and add required packages
-
+#### Check and add required packages
 
 ############### Required libraries ############### 
 libs <- c("rgdal", "FedData", "geoknife", "purrr", 
@@ -17,7 +16,7 @@ options(help_type="html")
 
 #### set a CRAN mirror
 local({r <- getOption("repos")
-       r["CRAN"] <- "https://cran.cnr.berkeley.edu"
+       r["CRAN"] <- "https://cran.revolutionanalytics.com" 
        options(repos=r)})
 
 p <- as.data.frame(installed.packages())[,c("Package", "Version")]
@@ -30,8 +29,11 @@ if(!"FedData" %in% p$Package) {
   } else if(packageVersion("FedData") < "3.0.0.9000") { 
   devtools::install_github("ropensci/FedData")  
 }
+if(!"vctrs" %in% p$Package) {
+  install.packages("vctrs")
+  } else if(packageVersion("vctrs") < "0.3.0 ") { 
+  install.packages("vctrs")  
+}
 
 # Install packages
-libraries(libs, add=TRUE, check.source=FALSE)
-
-
+libraries(libs[-which(libs %in% "FedData")], add=TRUE, check.source=FALSE)
