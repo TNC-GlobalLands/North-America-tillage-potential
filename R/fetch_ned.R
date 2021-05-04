@@ -32,7 +32,7 @@ fetch_ned <- function(x, out.res = c(13, 1), out.dir = getwd(),
 	        install from github ropensci/FedData") 
   if(!any(class(x)[1] == c("sf","SpatialPolygonsDataFrame", "SpatialPolygons")))
     stop("x must be an sp or sf polygon object")
-  if(!res[1] %in% c(1,13))
+  if(!out.res[1] %in% c(1,13))
     stop("res argument can only be 1 (30m) or 13 (10m)")
   tryCatch({
   geo.prj = sf::st_crs("+proj=longlat +datum=NAD83 +no_defs")
@@ -58,7 +58,7 @@ fetch_ned <- function(x, out.res = c(13, 1), out.dir = getwd(),
     result <- NULL
       try_number <- 1 
   while(is.null(result) && try_number <= retrynum) {
-    cat("Downloading NED:", try_number, "of", retrynum, "\n")
+    cat("Downloading NED attempt:", try_number, "of", retrynum, "\n")
       try_number <- try_number + 1
       result <- get_data_attempt()
     Sys.sleep(sleepnum)

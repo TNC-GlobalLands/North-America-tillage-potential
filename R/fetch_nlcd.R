@@ -16,7 +16,7 @@
 #'
 #' @note depends; sf, sp, FedData > 3.0, purrr 
 #' 
-#' @author Eugene Yacobson <eyacobson@@tnc.org> and Jeffrey S. Evans  
+#' @author Jeffrey S. Evans 
 #'                                                              
 #' @examples
 #' library(raster) 
@@ -61,7 +61,7 @@ fetch_nlcd <- function(x, yr = c(2001, 2004, 2006, 2008, 2011, 2016),
   if(!yr %in% c(2001, 2004, 2006, 2008, 2011, 2016))
     stop("Not a valid year") 
   if(yr == 2008 & data.set != "Land_Cover")
-    stop("Only Landcover is avalibie for 2008")
+    stop("Only Landcover is available for 2008")
   land.mass = land.mass[1]
   tryCatch({
   usgs.prj = sf::st_crs("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")					    

@@ -1,0 +1,30 @@
+aws configure
+AKIAILGW6URLBPDIZRIA
+/xBW7xQ+NIlPaR9d1Z47KNiVKw5P+s8u5xLOdiHG
+us-east-1
+text
+
+#' upload soil rasters to AWS S3
+aws s3 cp D:\soil\gNATSGO\soil_rasters s3://TillageModel/tillage/soil --recursive
+
+
+#' sync entire bucket to directory using sync
+aws s3 sync s3://TillageModel/tillage/model D:\tillage\model
+
+
+#' download entire bucket to directory using cp
+aws s3 cp s3://TillageModel/tillage D:\ --recursive
+
+#' download entire bucket to directory using sync
+aws s3 sync s3://TillageModel/tillage D:\tillage
+
+#' sync entire bucket to directory using sync
+aws s3 sync C:\evans\tillage\model s3://TillageModel/tillage/model 
+
+#' overwrite bucket to directory using cp
+aws s3 cp C:\evans\tillage\model s3://TillageModel/tillage/model --recursive
+
+
+# Sync missing model
+aws s3 sync D:\tillage\model\Kentucky\Hancock s3://TillageModel/tillage/model/Kentucky/Hancock 
+

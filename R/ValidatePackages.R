@@ -1,9 +1,12 @@
 #### Check and add required packages
 
 ############### Required libraries ############### 
-libs <- c("rgdal", "FedData", "geoknife", "purrr", 
-          "rfUtilities","raster", "sf", "randomForest", 
-		  "spatialEco", "ranger")
+libs <- c("rgdal", "FedData", "geoknife", "purrr",
+          "terra", "sp", "sf", "raster", "rgdal",
+          "spatialEco", "exactextractr", "devtools",
+          "fasterRaster", "randomForest", "ranger",
+          "pdp", "classInt", "ggplot2", "rfUtilities",
+		  "remotes")
 ##################################################
 
 options(stringsAsFactors=FALSE)
