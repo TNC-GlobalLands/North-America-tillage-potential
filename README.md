@@ -73,15 +73,15 @@ validation threshold indicating that a model should be rejected).
 
 [New Hampshire](https://s3.amazonaws.com/TillageModel/tillage/model/New%20Hampshire/New%20Hampshire_probs.tif)
 
-[New Jersey](https://s3.amazonaws.com/TillageModel/tillage/model/New Jersey/New Jersey_probs.tif)
+[New Jersey](https://s3.amazonaws.com/TillageModel/tillage/model/New%20Jersey/New%20Jersey_probs.tif)
 
-[New Mexico](https://s3.amazonaws.com/TillageModel/tillage/model/New Mexico/New Mexico_probs.tif)
+[New Mexico](https://s3.amazonaws.com/TillageModel/tillage/model/New%20Mexico/New%20Mexico_probs.tif)
 
-[New York](https://s3.amazonaws.com/TillageModel/tillage/model/New York/New York_probs.tif)
+[New York](https://s3.amazonaws.com/TillageModel/tillage/model/New%20York/New%20York_probs.tif)
 
-[North Carolina](https://s3.amazonaws.com/TillageModel/tillage/model/North Carolina/North Carolina_probs.tif)
+[North Carolina](https://s3.amazonaws.com/TillageModel/tillage/model/North%20Carolina/North%20Carolina_probs.tif)
 
-[North Dakota](https://s3.amazonaws.com/TillageModel/tillage/model/North Dakota/North Dakota_probs.tif)
+[North Dakota](https://s3.amazonaws.com/TillageModel/tillage/model/North%20Dakota/North%20Dakota_probs.tif)
 
 [Ohio](https://s3.amazonaws.com/TillageModel/tillage/model/Ohio/Ohio_probs.tif)
 
@@ -91,11 +91,11 @@ validation threshold indicating that a model should be rejected).
 
 [Pennsylvania](https://s3.amazonaws.com/TillageModel/tillage/model/Pennsylvania/Pennsylvania_probs.tif)
 
-[Rhode Island](https://s3.amazonaws.com/TillageModel/tillage/model/Rhode Island/Rhode Island_probs.tif)
+[Rhode Island](https://s3.amazonaws.com/TillageModel/tillage/model/Rhode%20Island/Rhode%20Island_probs.tif)
 
-[South Carolina](https://s3.amazonaws.com/TillageModel/tillage/model/South Carolina/South Carolina_probs.tif)
+[South Carolina](https://s3.amazonaws.com/TillageModel/tillage/model/South%20Carolina/South%20Carolina_probs.tif)
 
-[South Dakota](https://s3.amazonaws.com/TillageModel/tillage/model/South Dakota/South Dakota_probs.tif)
+[South Dakota](https://s3.amazonaws.com/TillageModel/tillage/model/South%20Dakota/South%20Dakota_probs.tif)
 
 [Tennessee](https://s3.amazonaws.com/TillageModel/tillage/model/Tennessee/Tennessee_probs.tif)
 
@@ -109,7 +109,7 @@ validation threshold indicating that a model should be rejected).
 
 [Washington](https://s3.amazonaws.com/TillageModel/tillage/model/Washington/Washington_probs.tif)
 
-[West Virginia](https://s3.amazonaws.com/TillageModel/tillage/model/West Virginia/West Virginia_probs.tif)
+[West Virginia](https://s3.amazonaws.com/TillageModel/tillage/model/West%20Virginia/West%20Virginia_probs.tif)
 
 [Wisconsin](https://s3.amazonaws.com/TillageModel/tillage/model/Wisconsin/Wisconsin_probs.tif)
 
