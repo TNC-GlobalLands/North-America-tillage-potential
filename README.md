@@ -7,12 +7,14 @@ resoultion and, in a USGS CONUS Albers Equal Area (EPSG:5070) projection.
 
 CRS string: +proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
 
-# Tillage model restuls <img src="Documents/TillageFigures.jpg" align="left" />
+# Tillage model results 
+<img src="Documents/TillageFigures.jpg" align="left" />
+
 
 Figure captions
 	a) Current tillage as proportion of county
 	b) potential tillage as proportion of county
-	c) potential expansion of tillage in county, residuals of Δ(potential, current)
+	c) potential expansion of tillage in county, residuals of Δ(potential, current) and,
 	d) The county-level global log loss validation statistic
 
 # State AWS S3 download
