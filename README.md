@@ -15,7 +15,7 @@ a) Current tillage as proportion of county,
 b) potential tillage as proportion of county,
 c) potential expansion of tillage in county, residuals of Δ(potential, current) and,
 d) The county-level global log loss validation statistic (note; no county-level model exceeded our
-validation threshold indicating that a model should be rejected).
+log-loss or Kappa validation thresholds that would indicate that a model should be rejected).
 
 # State AWS S3 download
 
