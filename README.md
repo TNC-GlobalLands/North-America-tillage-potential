@@ -21,7 +21,7 @@ validation threshold indicating that a model should be rejected).
 
 [Alabama](https://s3.amazonaws.com/TillageModel/tillage/model/Alabama/Alabama_probs.tif)
 
-[Arizona}(https://s3.amazonaws.com/TillageModel/tillage/model/Arizona/Arizona_probs.tif)
+[Arizona](https://s3.amazonaws.com/TillageModel/tillage/model/Arizona/Arizona_probs.tif)
 
 [Arkansas](https://s3.amazonaws.com/TillageModel/tillage/model/Arkansas/Arkansas_probs.tif)
 
@@ -71,7 +71,7 @@ validation threshold indicating that a model should be rejected).
 
 [Nevada](https://s3.amazonaws.com/TillageModel/tillage/model/Nevada/Nevada_probs.tif)
 
-[New Hampshire]((https://s3.amazonaws.com/TillageModel/tillage/model/New Hampshire/New Hampshire_probs.tif)
+[New Hampshire](https://s3.amazonaws.com/TillageModel/tillage/model/New%20Hampshire/New%20Hampshire_probs.tif)
 
 [New Jersey](https://s3.amazonaws.com/TillageModel/tillage/model/New Jersey/New Jersey_probs.tif)
 
