@@ -1,7 +1,7 @@
 ############################################################st_crs(2163
 ############################################################
 # Tillage Model - probabilistic estimate of
-# tillage suitability using NASS fro training data
+# tillage suitability using NASS for training data
 # SSURGO soil data for stratification and climatic,
 # geomorphometric and soil for model parameters.
 #
