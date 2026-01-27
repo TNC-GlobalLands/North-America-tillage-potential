@@ -19,6 +19,6 @@ d) County-level global log loss validation statistic
 # Data download
 The tillage probability dataset is available for download via Zenodo.
 
-https://doi.org/10.5281/zenodo.15596313 [https://doi.org/10.5281/zenodo.15596313]
+https://doi.org/10.5281/zenodo.15596313
 
 
